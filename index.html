@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Yard Barker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body, html { margin:0; padding:0; height:100%; font-family: Arial; }
+    #map { height: 100vh; }
+    .header {
+      position: absolute; top: 10px; left: 10px; z-index: 1000;
+      background: white; padding: 12px; border-radius: 10px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.3); font-size: 16px;
+    }
+    .header h1 { margin:0; font-size: 20px; color: #2e8b57; }
+    .popup { font-size: 15px; }
+    .call-btn { background: #2e8b57; color: white; padding: 8px 12px; border-radius: 5px; text-decoration: none; display: inline-block; margin-top: 5px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🐕 Yard Barker</h1>
+    <p>Tap any house to see who did the work!</p>
+  </div>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // CHANGE THIS TO YOUR CITY
+    const cityCenter = [30.2672, -97.7431]; // Austin, TX example
+    const map = L.map('map').setView(cityCenter, 15);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    // SAMPLE PROJECTS — YOU'LL REPLACE WITH REAL ONES
+    const projects = [
+      {
+        lat: 30.2672, lng: -97.7431,
+        contractor: "GreenScape Pro",
+        service: "Full Landscaping",
+        rating: 4.9,
+        phone: "+15551234567",
+        photo: "https://via.placeholder.com/300x200?text=Beautiful+Garden"
+      },
+      {
+        lat: 30.2700, lng: -97.7500,
+        contractor: "RoofMasters",
+        service: "New Roof Installation",
+        rating: 5.0,
+        phone: "+15559876543",
+        photo: "https://via.placeholder.com/300x200?text=New+Roof"
+      }
+    ];
+
+    projects.forEach(p => {
+      const popupContent = `
+        <b>${p.contractor}</b><br>
+        ${p.service}<br>
+        ⭐ ${p.rating}/5<br>
+        <img src="${p.photo}" width="100%" style="border-radius:8px; margin:8px 0;"><br>
+        <a href="tel:${p.phone}" class="call-btn">📞 Call Now</a>
+      `;
+      L.marker([p.lat, p.lng])
+        .addTo(map)
+        .bindPopup(popupContent);
+    });
+
+    // Auto-center on user location
+    map.locate({setView: true, maxZoom: 16});
+  </script>
+</body>
+</html>
